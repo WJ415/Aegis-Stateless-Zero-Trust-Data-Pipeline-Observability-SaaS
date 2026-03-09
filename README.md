@@ -1,38 +1,4 @@
-graph TD
-    subgraph "External Sources"
-        API["External Fiat Gateway API<br/>(Binance/Settlement)"]
-    end
 
-    subgraph "Aegis Stateless Application (Streamlit)"
-        UI["User Interface<br/>(Zero-Trust Portal)"]
-        Auth["In-Memory Auth<br/>(TOTP/MFA)"]
-        ETL["Ingestion Engine<br/>(Python/Requests)"]
-    end
-
-    subgraph "Data Warehouse (Snowflake)"
-        RAW[("STABLECOIN_TRANSFERS<br/>(Raw PII Data)")]
-        View["VW_STABLECOIN_SECURE<br/>(Secure View)"]
-        Logs[("API_HEALTH_LOGS<br/>(Telemetry Logs)")]
-    end
-
-    subgraph "Access Control (RBAC)"
-        DE["Data Engineer Role<br/>(Masked View)"]
-        CO["Compliance Officer Role<br/>(Cleartext View)"]
-    end
-
-    %% Data Flow
-    API -->|Real-time Latency| ETL
-    ETL -->|Insert| Logs
-    ETL -->|Mock Settlement| RAW
-
-    %% Security Flow
-    UI -->|Ephemeral TOTP| Auth
-    Auth -->|Stateless Connection| RAW
-
-    %% Compliance Flow
-    RAW --> View
-    View -->|RBAC Masking| DE
-    View -->|Full Access| CO
     # Aegis: Stateless Zero-Trust Data Pipeline & Observability SaaS
 
 ![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)
@@ -70,3 +36,4 @@ streamlit run app.py
 # 3. Authenticate
 
 # Enter your Data Warehouse Account, User, Password, and a live TOTP MFA token directly in the UI to unlock the pipeline.
+
